@@ -14,47 +14,67 @@
   .links a{display:block;width:100%;padding:13px 14px;border-radius:12px;}
   .links .pill{text-align:center;margin-top:6px;}
 }
-</style></head><body><header><div class="wrap"><nav class="site-nav"><a class="brand" href="index.html">ClemRae<span>LLC</span></a><button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button><div class="links" id="navLinks"><a href="index.html">Home</a><a href="about.html">About</a><a href="education.html">Education</a><a href="digital.html">Digital</a><a href="learning.html">Learning</a><a href="1stClassRealty.html">1st Class Realty</a><a class="pill" href="contact.html">Contact</a></div></nav></div></header><main class="contactp"><section class="hero"><div class="wrap contact-box"><p class="eyebrow">Contact ClemRae LLC</p><h1>Tell us which branch fits your <span>next step.</span></h1><p class="lead">Use this page as your placeholder contact page. You can add your form, email, phone number, booking calendar, or CRM embed here later.</p><a class="btn" href="#contact-form">Complete contact form</a></div></section><section class="contact-form-section" id="contact-form"><div class="wrap"><form class="contact-form-card" method="POST" onsubmit="return sendClemRaeForm(this,'ClemRae LLC')"><h2>Send an inquiry</h2><p>Complete the form below and your inquiry will be sent directly to the ClemRae team.</p><div class="form-grid"><div class="form-field"><label for="name">Name</label><input id="name" name="Name" type="text" required></div><div class="form-field"><label for="email">Email</label><input id="email" name="Email" type="email" required></div><div class="form-field"><label for="phone">Phone</label><input id="phone" name="Phone" type="tel"></div><div class="form-field"><label for="service">Service Interest</label><select id="service" name="Service Interest"><option>ClemRae Education — Tutoring</option><option>ClemRae Digital — Web Development</option><option>ClemRae Learning — Instructional Design & Training</option><option>First Class Realty — Real Estate</option><option>Not sure yet</option></select></div><div class="form-field full"><label for="message">Message</label><textarea id="message" name="Message" placeholder="Tell us what you need..." required></textarea></div></div><button type="submit" class="btn form-submit">Send message</button></form></div></section></main><footer class="footer"><div class="wrap"><span>© <span id="year"></span> ClemRae LLC. All rights reserved.</span><span><a href="index.html">Home</a> · <a href="contact.html">Inquire about a service</a></span></div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script><script>
-const CLEMRAE_FORM_ENDPOINT = 'https://formsubmit.co/ajax/clemraellc@gmail.com';
-async function sendClemRaeForm(form, service) {
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalText = submitButton ? submitButton.textContent : '';
-  if (submitButton) {
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
-  }
 
-  const formData = new FormData(form);
-  formData.append('_subject', service + ' Inquiry');
-  formData.append('_template', 'table');
-  formData.append('_captcha', 'false');
-  formData.append('Division', service);
-
-  try {
-    const response = await fetch(CLEMRAE_FORM_ENDPOINT, {
-      method: 'POST',
-      body: formData,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (!response.ok) throw new Error('Submission failed');
-
-    form.innerHTML = `
-      <div class="thank-you-message" role="status" aria-live="polite">
-        <h2>Thank you for your inquiry.</h2>
-        <p>A member of the ClemRae team will get back to you.</p>
-      </div>
-    `;
-  } catch (error) {
-    if (submitButton) {
-      submitButton.disabled = false;
-      submitButton.textContent = originalText;
-    }
-    alert('There was a problem submitting the form. Please try again or email clemraellc@gmail.com directly.');
-  }
-  return false;
+/* Strong mobile menu visibility fix */
+@media(max-width:820px){
+  .links{background:#ffffff !important;color:#152B29 !important;z-index:1000 !important}
+  .links a{color:#152B29 !important}
+  .links .pill{background:#152B29 !important;color:#ffffff !important}
 }
-</script>
+
+
+.form-status{margin-top:16px;padding:14px 16px;border-radius:14px;display:none;font-weight:600}
+.form-status.error{display:block;background:#fff0f0;color:#8a1f1f;border:1px solid #f1b3b3}
+.hidden-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-submit:disabled{opacity:.65;cursor:not-allowed}
+
+</style></head><body><header><div class="wrap"><nav class="site-nav"><a class="brand" href="index.html">ClemRae<span>LLC</span></a><button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button><div class="links" id="navLinks"><a href="index.html">Home</a><a href="about.html">About</a><a href="education.html">Education</a><a href="digital.html">Digital</a><a href="learning.html">Learning</a><a href="1stClassRealty.html">1st Class Realty</a><a class="pill" href="contact.html">Contact</a></div></nav></div></header><main class="contactp"><section class="hero"><div class="wrap contact-box"><p class="eyebrow">Contact ClemRae LLC</p><h1>Tell us which branch fits your <span>next step.</span></h1><p class="lead">Use this page as your placeholder contact page. You can add your form, email, phone number, booking calendar, or CRM embed here later.</p><a class="btn" href="#contact-form">Complete contact form</a></div></section><section class="contact-form-section" id="contact-form"><div class="wrap"><form class="contact-form-card" id="contactForm" method="POST" action="contact-handler.php" novalidate>
+  <input type="hidden" name="Division" value="General Contact">
+  <div class="hidden-field" aria-hidden="true">
+    <label for="website_confirm">Leave this field blank</label>
+    <input id="website_confirm" name="website_confirm" type="text" tabindex="-1" autocomplete="off">
+  </div>
+
+  <h2>Send an Inquiry</h2>
+  <p>Complete the form below and your inquiry will be sent directly to the ClemRae team.</p>
+
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="name">Full Name</label>
+      <input id="name" name="Name" type="text" maxlength="100" required>
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email Address</label>
+      <input id="email" name="Email" type="email" maxlength="160" required>
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Phone Number</label>
+      <input id="phone" name="Phone" type="tel" maxlength="40">
+    </div>
+
+    <div class="form-field">
+      <label for="service">Service Interest</label>
+      <select id="service" name="Service Interest" required>
+        <option value="">Select One</option>
+        <option>ClemRae Education — Tutoring</option>
+        <option>ClemRae Digital — Web Development</option>
+        <option>ClemRae Learning — Instructional Design & Training</option>
+        <option>First Class Realty — Real Estate</option>
+        <option>Not sure yet</option>
+      </select>
+    </div>
+
+    <div class="form-field full">
+      <label for="message">Message</label>
+      <textarea id="message" name="Message" maxlength="3000" placeholder="Tell us what you need..." required></textarea>
+    </div>
+  </div>
+
+  <button type="submit" class="btn form-submit">Send Message</button>
+  <div class="form-status" role="alert" aria-live="polite"></div>
+</form></div></section></main><footer class="footer"><div class="wrap"><span>© <span id="year"></span> ClemRae LLC. All rights reserved.</span><span><a href="index.html">Home</a> · <a href="contact.html">Inquire about a service</a></span></div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 <script>
 (function(){
   const menuBtn=document.getElementById('menuBtn');
@@ -73,4 +93,73 @@ async function sendClemRaeForm(form, service) {
   }
 })();
 </script>
+
+<script>
+(function(){
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const submitButton = form.querySelector("button[type='submit']");
+    const status = form.querySelector(".form-status");
+
+    if (status) {
+      status.className = "form-status";
+      status.textContent = "";
+      status.style.display = "none";
+    }
+
+    if (!form.checkValidity()) {
+      if (status) {
+        status.textContent = "Please complete all required fields before submitting.";
+        status.className = "form-status error";
+        status.style.display = "block";
+      }
+      form.reportValidity();
+      return;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+    }
+
+    try {
+      const response = await fetch("contact-handler.php", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      });
+
+      const result = await response.json().catch(function() { return {}; });
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Submission failed.");
+      }
+
+      form.innerHTML = `
+        <div class="thank-you-message" role="status" aria-live="polite">
+          <h2>Thank you for your inquiry.</h2>
+          <p>A member of the ClemRae team will get back to you.</p>
+        </div>
+      `;
+    } catch (error) {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Send Message";
+      }
+      if (status) {
+        status.textContent = error.message || "There was a problem submitting the form. Please try again or email clemraellc@gmail.com directly.";
+        status.className = "form-status error";
+        status.style.display = "block";
+      } else {
+        alert(error.message || "There was a problem submitting the form. Please try again.");
+      }
+    }
+  });
+})();
+</script>
+
 </body></html>

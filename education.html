@@ -16,6 +16,14 @@
   .links a{display:block;width:100%;padding:13px 14px;border-radius:12px;}
   .links .pill{text-align:center;margin-top:6px;}
 }
+
+/* Strong mobile menu visibility fix */
+@media(max-width:820px){
+  .links{background:#ffffff !important;color:#152B29 !important;z-index:1000 !important}
+  .links a{color:#152B29 !important}
+  .links .pill{background:#152B29 !important;color:#ffffff !important}
+}
+
 </style></head><body><header><div class="wrap"><nav class="site-nav"><a class="brand" href="index.html">ClemRae<span>LLC</span></a><button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button><div class="links" id="navLinks"><a href="index.html">Home</a><a href="about.html">About</a><a href="education.html">Education</a><a href="digital.html">Digital</a><a href="learning.html">Learning</a><a href="1stClassRealty.html">1st Class Realty</a><a class="pill" href="contact.html">Contact</a></div></nav></div></header><main class="edu"><section class="hero"><div class="wrap hero-inner"><div><p class="eyebrow">ClemRae Education · Est. 2016</p><h1>Support that makes school feel <span>possible.</span></h1><p class="lead">Personalized tutoring for elementary students designed to strengthen reading, writing, math, homework habits, and classroom confidence.</p><a class="btn" href="YOUR_GOOGLE_CALENDAR_LINK_HERE" target="_blank" rel="noopener">Inquire about tutoring</a></div><div class="school-art art"><div class="supply s1">✏️</div><div class="supply s2">📚</div><div class="supply s3">🎒</div><div class="supply s4">🧮</div></div></div></section><section class="section"><div class="wrap grid"><div class="card"><h2>Purpose</h2><p>ClemRae Education helps young learners build foundational skills while developing confidence, independence, and positive learning habits.</p></div><div class="card"><h2>Services</h2><div class="chips"><span class="chip">Reading</span><span class="chip">Writing</span><span class="chip">Math</span><span class="chip">Homework Support</span><span class="chip">Study Skills</span><span class="chip">Two Sessions Weekly</span></div></div></div></section></main><footer class="footer"><div class="wrap"><span>© <span id="year"></span> ClemRae LLC. All rights reserved.</span><span><a href="index.html">Home</a> · <a href="contact.html">Inquire about a service</a></span></div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 <script>
 (function(){

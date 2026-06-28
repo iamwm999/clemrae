@@ -1,7 +1,7 @@
 <?php
 /**
  * ClemRae LLC Universal Contact Handler
- * Upload this file to the same folder as your HTML pages.
+ * Place this file in the same folder as your HTML pages.
  */
 
 declare(strict_types=1);
@@ -27,14 +27,18 @@ function clean_input(string $value, int $maxLength = 1000): string {
     $value = trim($value);
     $value = str_replace(["\0", "\r"], "", $value);
     $value = strip_tags($value);
-    $value = mb_substr($value, 0, $maxLength, "UTF-8");
+    if (function_exists("mb_substr")) {
+        $value = mb_substr($value, 0, $maxLength, "UTF-8");
+    } else {
+        $value = substr($value, 0, $maxLength);
+    }
     return $value;
 }
 
 function clean_email(string $email): string {
     $email = trim($email);
     $email = str_replace(["\r", "\n", "%0a", "%0d"], "", $email);
-    return filter_var($email, FILTER_SANITIZE_EMAIL);
+    return filter_var($email, FILTER_SANITIZE_EMAIL) ?: "";
 }
 
 function esc_html(string $value): string {
@@ -67,25 +71,25 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     respond(false, "Method not allowed.", 405);
 }
 
-/* Basic spam protection */
+/* Honeypot spam protection */
 $honeypot = trim($_POST["website_confirm"] ?? "");
 if ($honeypot !== "") {
     respond(true, "Thank you for your inquiry.");
 }
 
-/* Collect and sanitize fields */
+/* Collect fields */
 $division = clean_input($_POST["Division"] ?? "General Contact", 80);
 $name = clean_input($_POST["Name"] ?? "", 100);
 $email = clean_email($_POST["Email"] ?? "");
 $phone = clean_input($_POST["Phone"] ?? "", 40);
-$service = clean_input($_POST["Service Interest"] ?? "", 120);
-$company = clean_input($_POST["Company"] ?? "", 140);
+$service = clean_input($_POST["Service Interest"] ?? "", 140);
+$company = clean_input($_POST["Company"] ?? "", 160);
 $currentWebsite = clean_input($_POST["Current Website"] ?? "", 220);
-$timeline = clean_input($_POST["Timeline"] ?? "", 80);
-$budget = clean_input($_POST["Budget"] ?? "", 80);
+$timeline = clean_input($_POST["Timeline"] ?? "", 100);
+$budget = clean_input($_POST["Budget"] ?? "", 100);
 $message = clean_input($_POST["Message"] ?? "", 3000);
 
-/* Validation */
+/* Validate required fields */
 if ($name === "" || $email === "" || $message === "") {
     respond(false, "Please complete your name, email, and message.", 400);
 }
@@ -98,11 +102,11 @@ if (!valid_url_or_blank($currentWebsite)) {
     respond(false, "Please enter a valid website URL beginning with https:// or leave the website field blank.", 400);
 }
 
-if (mb_strlen($message, "UTF-8") < 10) {
+if ((function_exists("mb_strlen") ? mb_strlen($message, "UTF-8") : strlen($message)) < 10) {
     respond(false, "Please include a little more detail in your message.", 400);
 }
 
-/* Limit accepted division labels */
+/* Allowed divisions */
 $allowedDivisions = [
     "ClemRae Digital",
     "ClemRae Learning",
@@ -115,13 +119,12 @@ if (!in_array($division, $allowedDivisions, true)) {
     $division = "General Contact";
 }
 
-/* Additional spam keyword filter */
-$spamPattern = "/\b(viagra|casino|crypto investment|loan offer|adult dating|porn|sex|hack|seo backlinks)\b/i";
+/* Simple spam keyword protection */
+$spamPattern = "/\b(viagra|casino|crypto investment|loan offer|adult dating|porn|sex|hack|seo backlinks|backlinks)\b/i";
 if (preg_match($spamPattern, $message . " " . $name . " " . $company)) {
     respond(false, "Your message could not be submitted.", 400);
 }
 
-/* Build email to ClemRae */
 $subject = "New Inquiry - " . $division;
 
 $fields = [
@@ -130,10 +133,10 @@ $fields = [
     "Email" => $email,
     "Phone" => $phone,
     "Service Interest" => $service,
-    "Company / Organization" => $company,
+    "Company / Organization / Area" => $company,
     "Current Website" => $currentWebsite,
     "Timeline" => $timeline,
-    "Budget" => $budget,
+    "Budget / Price Range" => $budget,
     "Message" => $message
 ];
 
@@ -179,7 +182,6 @@ $adminEmailHtml = "
 </body>
 </html>";
 
-/* Build auto-reply email to visitor */
 $replySubject = "Thank you for contacting ClemRae";
 
 $visitorEmailHtml = "
@@ -229,7 +231,6 @@ $visitorEmailHtml = "
 </body>
 </html>";
 
-/* Email headers */
 $adminHeaders = [];
 $adminHeaders[] = "MIME-Version: 1.0";
 $adminHeaders[] = "Content-Type: text/html; charset=UTF-8";
@@ -244,7 +245,6 @@ $visitorHeaders[] = "From: " . $siteName . " <" . $fromEmail . ">";
 $visitorHeaders[] = "Reply-To: " . $toEmail;
 $visitorHeaders[] = "X-Mailer: PHP/" . phpversion();
 
-/* Send emails */
 $adminSent = mail($toEmail, $subject, $adminEmailHtml, implode("\r\n", $adminHeaders));
 $visitorSent = mail($email, $replySubject, $visitorEmailHtml, implode("\r\n", $visitorHeaders));
 

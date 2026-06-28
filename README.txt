@@ -1,4 +1,6 @@
-ClemRae LLC Updated Multi-Page Website
+ClemRae updated site files
+
+Upload all files in this folder to the same website directory on InMotion.
 
 Files included:
 - index.html
@@ -8,12 +10,19 @@ Files included:
 - learning.html
 - 1stClassRealty.html
 - contact.html
-- .htaccess
+- contact-handler.php
 
-Updates in this version:
-- Contact forms added to Digital, Learning, Contact, and 1stClassRealty pages.
-- Forms use mailto and open an email addressed to clemraellc@gmail.com.
-- Digital, Learning, and 1stClassRealty hero buttons jump to their same-page contact forms.
-- Education inquiry button is linked to YOUR_GOOGLE_CALENDAR_LINK_HERE. Replace that placeholder with your actual Google Calendar appointment link.
+Forms updated:
+- digital.html
+- learning.html
+- 1stClassRealty.html
+- contact.html
 
-Clean URLs require Apache/.htaccess support.
+Each form submits to contact-handler.php without FormSubmit or a mail app.
+After submission, the form displays:
+"Thank you for your inquiry. A member of the ClemRae team will get back to you."
+
+Important:
+- PHP forms must be tested on the live InMotion server, not by opening the HTML file locally.
+- The sender address no-reply@clemrae.com should ideally exist in your hosting email account for best deliverability.
+- If emails do not arrive, check spam/promotions and ask InMotion whether PHP mail() is enabled.
