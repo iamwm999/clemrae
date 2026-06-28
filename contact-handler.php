@@ -9,7 +9,7 @@ declare(strict_types=1);
 header("Content-Type: application/json; charset=UTF-8");
 
 $siteName = "ClemRae LLC";
-$toEmail = "clemraellc@gmail.com";
+$toEmail = "main@clemrae.com";
 $fromEmail = "no-reply@clemrae.com";
 $fromName = "ClemRae Website";
 $motto = "Bringing ideas to light";
